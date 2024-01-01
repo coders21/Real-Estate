@@ -3,15 +3,25 @@ import { Col, Container, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Spinner from "../components/Spinner";
+import { getProperties } from "../features/properties/propertySlice";
 
-//import { getProperties } from "../features/properties/propertySlice";
+
+
 
 const PropertiesPage = () => {
 	
+	// Use the useSelector hook to access the Redux state
+	const {properties,isLoading,isSuccess} = useSelector((state)=>state.properties)
+	// Use the useDispatch hook to get the dispatch function
+	const dispatch=useDispatch()
+	// Use useEffect to dispatch the getProperties action when the component mounts
+	useEffect(()=>{
+		dispatch(getProperties())
+	},[dispatch])
 
-	// if (isLoading) {
-	// 	return <Spinner />;
-	// }
+	if (isLoading) {
+		return <Spinner />;
+	}
 	return (
 		<>
 			<Container>
