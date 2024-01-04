@@ -4,18 +4,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Spinner from "../components/Spinner";
 import { getProperties } from "../features/properties/propertySlice";
-
-
+import Property from "../components/Property"
+import Title from "../components/Title";
 
 
 const PropertiesPage = () => {
 	
 	// Use the useSelector hook to access the Redux state
-	const {properties,isLoading,isSuccess} = useSelector((state)=>state.properties)
+	const {properties,isLoading,isError,message} = useSelector((state)=>state.properties)
 	// Use the useDispatch hook to get the dispatch function
 	const dispatch=useDispatch()
 	// Use useEffect to dispatch the getProperties action when the component mounts
 	useEffect(()=>{
+
+		if (isError) {
+			toast.error(message, { icon: "😭" });
+		}
+
 		dispatch(getProperties())
 	},[dispatch])
 
@@ -24,6 +29,7 @@ const PropertiesPage = () => {
 	}
 	return (
 		<>
+			<Title title="Our Properties Catalog" />
 			<Container>
 				<Row>
 					<Col className="mg-top text-center">
@@ -31,6 +37,23 @@ const PropertiesPage = () => {
 						<hr className="hr-text" />
 					</Col>
 				</Row>
+				{
+					<>
+						<Row className="mt-3">
+							{properties.map((property) => (
+								<Col
+									key={property.id}
+									sm={12}
+									md={6}
+									lg={4}
+									xl={3}
+								>
+									<Property property={property} />
+								</Col>
+							))}
+						</Row>
+					</>
+				}
 			</Container>
 		</>
 	);
